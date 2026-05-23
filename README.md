@@ -45,8 +45,12 @@ Amazon DynamoDB
 
 ## AI Ticket Processing
 - AI-generated urgency classification
+- AI-generated ticket categorization
+- AI-generated sentiment analysis
 - AI-generated customer support replies
+- Confidence score generation
 - Structured JSON response parsing
+- Markdown-wrapped JSON cleanup
 
 ## Serverless Architecture
 - Event-driven processing
@@ -225,11 +229,20 @@ except Exception:
   "ticket_id": "TICKET-001",
   "message": "Urgent: I was charged twice",
   "urgency": "HIGH",
-  "drafted_reply": "We are escalating this issue immediately.",
+  "category": "Billing",
+  "sentiment": "Angry",
+  "confidence_score": 0.95,
+  "drafted_reply": "Thank you for contacting us. I sincerely apologize for the duplicate charge. Our billing team is investigating this immediately.",
+  "ai_used": true,
+  "model_id": "global.anthropic.claude-sonnet-4-5-20250929-v1:0",
+  "processing_status": "COMPLETED",
   "created_at": "2026-05-23T12:14:40Z"
 }
 ```
+---
+## DynamoDB Decimal Serialization
 
+Resolved DynamoDB float serialization issues by converting AI-generated confidence scores to Decimal types before persistence.
 ---
 
 # CloudWatch Logging
@@ -242,10 +255,12 @@ Structured logs are emitted for:
 Example:
 
 ```text
-Raw Bedrock response text:
 {
+  "event": "ticket_processed",
+  "ticket_id": "BEDROCK-001",
   "urgency": "HIGH",
-  "drafted_reply": "..."
+  "category": "Billing",
+  "ai_used": true
 }
 ```
 
@@ -265,6 +280,20 @@ Handled markdown-wrapped JSON responses from Claude models.
 ## Graceful Degradation
 Implemented fallback logic to prevent pipeline failure during AI outages.
 
+---
+
+# Production Engineering Challenges Encountered
+
+During development several real-world cloud engineering issues were encountered and resolved:
+
+- Bedrock marketplace subscription permissions
+- Anthropic model access approval
+- inference profile model invocation
+- markdown-wrapped JSON responses from Claude models
+- DynamoDB float serialization issues
+- graceful AI fallback handling
+- environment variable isolation in pytest
+- mocked Bedrock runtime testing
 ---
 
 # Future Improvements
