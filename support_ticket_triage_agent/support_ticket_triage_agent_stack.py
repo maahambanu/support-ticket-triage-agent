@@ -2,6 +2,7 @@ from aws_cdk import (
     Stack,
     Duration,
     RemovalPolicy,
+    aws_iam as iam,
     aws_lambda as _lambda,
     aws_sqs as sqs,
     aws_dynamodb as dynamodb,
@@ -54,12 +55,21 @@ class SupportTicketTriageAgentStack(Stack):
             code=_lambda.Code.from_asset("src"),
             timeout=Duration.seconds(60),
             environment={
-                "TABLE_NAME": tickets_table.table_name
+                "TABLE_NAME": tickets_table.table_name,
+                "USE_BEDROCK": "true",
+                "BEDROCK_MODEL_ID": "anthropic.claude-3-haiku-20240307-v1:0"
             }
         )
 
         # Permissions
         tickets_table.grant_write_data(processor_lambda)
+
+        processor_lambda.add_to_role_policy(
+        iam.PolicyStatement(
+        actions=["bedrock:InvokeModel"],
+        resources=["*"]
+            )
+        )
 
         # SQS Trigger
         processor_lambda.add_event_source(
