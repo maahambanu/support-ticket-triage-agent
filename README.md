@@ -12,6 +12,8 @@ The system automatically:
 ---
 
 # Architecture
+<img width="1774" height="887" alt="ChatGPT Image May 23, 2026, 05_00_09 PM" src="https://github.com/user-attachments/assets/91ffd8a4-b329-4164-92d0-4644fb03a692" />
+
 
 ```text
 Support Ticket
