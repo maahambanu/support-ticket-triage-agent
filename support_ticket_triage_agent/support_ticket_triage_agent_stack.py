@@ -57,7 +57,7 @@ class SupportTicketTriageAgentStack(Stack):
             environment={
                 "TABLE_NAME": tickets_table.table_name,
                 "USE_BEDROCK": "true",
-                "BEDROCK_MODEL_ID": "anthropic.claude-sonnet-4-5-20250929-v1:0"
+                "BEDROCK_MODEL_ID": "global.anthropic.claude-sonnet-4-5-20250929-v1:0"
             }
         )
 

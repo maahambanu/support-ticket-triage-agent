@@ -11,7 +11,7 @@ bedrock = boto3.client("bedrock-runtime")
 USE_BEDROCK = os.environ.get("USE_BEDROCK", "false").lower() == "true"
 BEDROCK_MODEL_ID = os.environ.get(
     "BEDROCK_MODEL_ID",
-    "eu.anthropic.claude-sonnet-4-5-20250929-v1:0"
+    "global.anthropic.claude-sonnet-4-5-20250929-v1:0"
 )
 
 
@@ -72,7 +72,14 @@ Ticket:
     response_body = json.loads(response["body"].read())
     text_response = response_body["content"][0]["text"]
 
-    return json.loads(text_response)
+    print(f"Raw Bedrock response text: {text_response}")
+    cleaned_response = (
+        text_response
+        .replace("```json", "")
+        .replace("```", "")
+        .strip()
+    )
+    return json.loads(cleaned_response)
 
 
 def process_ticket(body: dict) -> dict:
