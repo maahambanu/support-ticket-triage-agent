@@ -57,7 +57,7 @@ class SupportTicketTriageAgentStack(Stack):
             environment={
                 "TABLE_NAME": tickets_table.table_name,
                 "USE_BEDROCK": "true",
-                "BEDROCK_MODEL_ID": "anthropic.claude-3-haiku-20240307-v1:0"
+                "BEDROCK_MODEL_ID": "anthropic.claude-sonnet-4-5-20250929-v1:0"
             }
         )
 
@@ -65,9 +65,13 @@ class SupportTicketTriageAgentStack(Stack):
         tickets_table.grant_write_data(processor_lambda)
 
         processor_lambda.add_to_role_policy(
-        iam.PolicyStatement(
-        actions=["bedrock:InvokeModel"],
-        resources=["*"]
+            iam.PolicyStatement(
+                actions=[
+                    "bedrock:InvokeModel",
+                    "aws-marketplace:ViewSubscriptions",
+                    "aws-marketplace:Subscribe"
+                ],
+                 resources=["*"]
             )
         )
 

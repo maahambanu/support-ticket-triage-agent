@@ -11,7 +11,7 @@ bedrock = boto3.client("bedrock-runtime")
 USE_BEDROCK = os.environ.get("USE_BEDROCK", "false").lower() == "true"
 BEDROCK_MODEL_ID = os.environ.get(
     "BEDROCK_MODEL_ID",
-    "anthropic.claude-3-haiku-20240307-v1:0"
+    "eu.anthropic.claude-sonnet-4-5-20250929-v1:0"
 )
 
 
@@ -80,9 +80,14 @@ def process_ticket(body: dict) -> dict:
     message = body["message"]
 
     if USE_BEDROCK:
-        ai_result = analyze_ticket_with_bedrock(message)
-        urgency = ai_result["urgency"]
-        drafted_reply = ai_result["drafted_reply"]
+        try:
+            ai_result = analyze_ticket_with_bedrock(message)
+            urgency = ai_result["urgency"]
+            drafted_reply = ai_result["drafted_reply"]
+        except Exception as error:
+            print(f"Bedrock failed, using fallback logic: {str(error)}")
+            urgency = classify_urgency(message)
+            drafted_reply = draft_reply(message, urgency)
     else:
         urgency = classify_urgency(message)
         drafted_reply = draft_reply(message, urgency)
