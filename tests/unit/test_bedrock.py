@@ -19,16 +19,19 @@ def test_bedrock_success_with_markdown_json(mock_boto_resource, mock_boto_client
     mock_boto_client.return_value = mock_bedrock
 
     bedrock_response = {
-        "content": [
-            {
-                "text": """```json
-{
-  "urgency": "HIGH",
-  "drafted_reply": "We are escalating this immediately."
-}
-```"""
-            }
-        ]
+    "content": [
+        {
+            "text": """```json
+    {
+        "urgency": "HIGH",
+        "category": "Billing",
+        "sentiment": "Angry",
+        "confidence_score": 0.95,
+        "drafted_reply": "We are escalating this immediately."
+    }
+        ```"""
+         }
+     ]
     }
 
     mock_bedrock.invoke_model.return_value = {

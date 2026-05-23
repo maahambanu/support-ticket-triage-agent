@@ -23,17 +23,20 @@ def test_bedrock_markdown_json_regression(
     mock_boto_client.return_value = mock_bedrock
 
     bedrock_response = {
-        "content": [
-            {
-                "text": """```json
-{
+    "content": [
+        {
+            "text": """```json
+        {
   "urgency": "HIGH",
+  "category": "Billing",
+  "sentiment": "Angry",
+  "confidence_score": 0.91,
   "drafted_reply": "Thank you for contacting us. I am escalating this billing issue immediately."
 }
 ```"""
-            }
-        ]
-    }
+        }
+    ]
+}
 
     mock_bedrock.invoke_model.return_value = {
         "body": io.BytesIO(
